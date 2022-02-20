@@ -8,10 +8,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "multibase": "^4.0.6",
     "react": "^16.14.0",
     "react-dom": "^16.14.0"
   },
   "devDependencies": {
+    "@ocap/wallet": "^1.14.16",
     "@vitejs/plugin-react": "^1.0.7",
     "vite": "^2.8.0"
   }
