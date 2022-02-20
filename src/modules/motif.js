@@ -47,12 +47,13 @@ export default class Motif {
     if (!did) {
       throw new Error('DID is required');
     }
-    canvas.width = size;
-    canvas.height = size;
     this.size = size;
     this.did = did;
-    this.canvas = canvas;
-    this.ctx = canvas.getContext('2d');
+    if (canvas) {
+      canvas.width = size;
+      canvas.height = size;
+      this.canvas = canvas;
+    }
     this.opacity = opacity;
     // TODO: 图形和 canvas 的比例问题
     this.shapeSize = size * 0.25;
@@ -64,8 +65,9 @@ export default class Motif {
     this.positions = positions.map(item => grid.getOffset(item[0], item[1]));
   }
   
-  draw(positions) {
-    const { ctx, size, color, shapeSize: r, opacity } = this;
+  draw(canvas, positions) {
+    const { size, color, shapeSize: r, opacity } = this;
+    const ctx = canvas.getContext('2d');
     
     ctx.clearRect(0, 0, size, size);
     ctx.fillStyle = color;
@@ -87,10 +89,11 @@ export default class Motif {
     });
 
     ctx.restore();
+    return canvas;
   }
   
   render() {
-    this.draw(this.positions);
+    this.draw(this.canvas, this.positions);
   }
 
   animate(options = {}) {
@@ -112,10 +115,17 @@ export default class Motif {
         progress = easeOutBack((t - startTime) / duration);
         raf = requestAnimationFrame(update);
       }
-      this.draw(this.positions.map(item => [progress * item[0], progress * item[1]]))
+      this.draw(this.canvas, this.positions.map(item => [progress * item[0], progress * item[1]]))
     };
     requestAnimationFrame(update);
     return cancel;
+  }
+
+  getImageDataURL() {
+		const canvas = document.createElement('canvas');
+    canvas.width = this.size;
+    canvas.height = this.size;
+    return this.draw(canvas, this.positions).toDataURL();
   }
 }
 

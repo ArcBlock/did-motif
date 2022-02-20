@@ -15,6 +15,9 @@ function App() {
     new Motif({ did, size: 200, canvas: canvasRef2.current }).animate();
   }, [])
 
+  
+  const src = new Motif({ did, size: 200 }).getImageDataURL();
+
   return (
     <div className="App">
       <div>
@@ -31,6 +34,10 @@ function App() {
 
       <div>
         <canvas ref={canvasRef2}></canvas>
+      </div>
+
+      <div>
+        <img src={src} alt="" style={{ width: 44, height: 44 }} />
       </div>
     </div>
   )
