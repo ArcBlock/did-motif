@@ -2,25 +2,26 @@ import multibase from 'multibase';
 import Grid from './grid';
 import colors from './colors';
 
+const TOTAL_COLORS = 32;
+const TOTAL_POSITIONS = 64;
+
 /**
  * 解析 DID, 根据 DID 计算背景色和位置
  * @param {string} did - DID
- * @param {number} totalColors - 颜色总数 (32)
- * @param {number} totalPositions - 位置总数 (8x8=64)
  * @returns {object} - 返回结果包含 colorIndex (0-31) 和 positionIndexes (含 8 个元素的数组, 每个元素为 0-63 的数字)
  */
-export const parseDID = (did, totalColors = 32, totalPositions = 64) => {
+export const parseDID = (did) => {
   // base58 did -> binary DID string
   // 参考: https://github.com/ArcBlock/ABT-DID-Protocol#create-did (step9 -> step8)
   const decoded = multibase.decode(did);
   // 移除前 2 bytes (did type 部分)
   const striped = decoded.slice(2);
   // 前 8 bytes 求和后对 totalColors 取模 => colorIndex
-  const colorIndex = striped.slice(0, 8).reduce((acc, cur) => acc + cur, 0) % totalColors;
+  const colorIndex = striped.slice(0, 8).reduce((acc, cur) => acc + cur, 0) % TOTAL_COLORS;
   // 后 16 bytes 均分 8 组后每组对 2 个 bytes 求和再对 totalPositions 取模 => positionIndexes
   const trailingBytes = striped.slice(8);
   const positionIndexes = [...new Array(8)].map(
-    (_, index) => (trailingBytes[index * 2] + trailingBytes[index * 2 + 1]) % totalPositions
+    (_, index) => (trailingBytes[index * 2] + trailingBytes[index * 2 + 1]) % TOTAL_POSITIONS
   );
 
   return {
