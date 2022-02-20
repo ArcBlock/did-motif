@@ -41,32 +41,41 @@ export const getDIDMotifInfo = (did) => {
   };
 };
 
-// 0 - 63 ==>
-// [0,0] [0,1] [0,2] [0,3] [0,4] [0,5] [0,6] [0,7]
-// [1,0] [1,1] [1,2] [1,3] [1,4] [1,5] [1,6] [1,7]
-// ...
-// [7,0] [7,1] [7,2] [7,3] [7,4] [7,5] [7,6] [7,7]
+export default class Motif {
+  constructor({ did, size = 120, opacity = 0.5, canvas }) {
+    if (!did) {
+      throw new Error('DID is required');
+    }
+    canvas.width = size;
+    canvas.height = size;
+    this.size = size;
+    this.did = did;
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.opacity = opacity;
+    // TODO: 图形和 canvas 的比例问题
+    this.shapeSize = size * 0.25;
+    const { color, positions } = getDIDMotifInfo(did);
+    // 背景色
+    this.color = color;
+    // 位置
+    const grid = new Grid({ width: size, height: size, xLines: 8, yLines: 8 });
+    this.positions = positions.map(item => grid.getOffset(item[0], item[1]));
+  }
+  
+  draw(positions) {
+    const { ctx, size, color, shapeSize: r, opacity } = this;
+    
+    ctx.clearRect(0, 0, size, size);
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, size, size);
 
-
-// 渲染 did motif
-export const render = (canvas, options) => {
-  const { did, size = 120, animation } = options;
-  canvas.width = size;
-  canvas.height = size;
-  const context = canvas.getContext('2d');
-  const opacity = 0.5;
-  // TODO: 图形和 canvas 的比例问题
-  const shapeSize = size * 0.25;
-  const { color, positions } = getDIDMotifInfo(did);
-  const grid = new Grid({ width: size, height: size, xLines: 8, yLines: 8 });
-  const offsets = positions.map(item => grid.getOffset(item[0], item[1]));
-
-  const draw = (ctx, { size, r, color, positions }) => {
     // https://eperezcosano.github.io/hex-grid/#a-hexagon
     const a = (2 * Math.PI) / 6;
-    function drawHexagon(x, y) {
-      ctx.save();
-      ctx.translate(size / 2, size / 2);
+    ctx.save();
+    ctx.translate(size / 2, size / 2);
+
+    positions.forEach(([x, y]) => {
       ctx.beginPath();
       for (let i = 0; i < 6; i++) {
         ctx.lineTo(x + r * Math.cos(a * (i - 1.5)), y + r * Math.sin(a * (i - 1.5)));
@@ -74,40 +83,43 @@ export const render = (canvas, options) => {
       ctx.closePath();
       ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
       ctx.fill();
-      ctx.restore();
-    }
+    });
 
-    ctx.clearRect(0, 0, size, size);
-    ctx.fillStyle = color;
-    ctx.fillRect(0, 0, size, size);
-    positions.forEach((position) => drawHexagon(position[0], position[1]));
+    ctx.restore();
+  }
+  
+  render() {
+    this.draw(this.positions);
   }
 
-  if (animation && animation.duration) {
-    const { duration, onComplete } = animation;
+  animate(options = {}) {
+    const { duration = 1000, onComplete = () => {} } = options;
     let startTime = null;
     let progress = 0;
     let raf = null;
+    const cancel = () => {
+      if (raf) {
+        cancelAnimationFrame(raf);
+      }
+    }
     const update = (t) => {
       startTime || (startTime = t);
       if (t - startTime > duration) {
         progress = 1;
-        onComplete && onComplete();
+        onComplete();
       } else {
         progress = easeOutBack((t - startTime) / duration);
         raf = requestAnimationFrame(update);
       }
-      draw(context, { size, r: shapeSize, color, positions: offsets.map(item => [progress * item[0], progress * item[1]]) })
+      this.draw(this.positions.map(item => [progress * item[0], progress * item[1]]))
     };
     requestAnimationFrame(update);
-    return canvas;
+    return cancel;
   }
-  draw(context, { size, r: shapeSize, color, positions: offsets })
-  return canvas;
 }
 
 // https://github.com/AndrewRayCode/easing-utils/blob/master/src/easing.js
-export function easeOutBack(t, magnitude = 1.70158) {
+function easeOutBack(t, magnitude = 1.70158) {
   const scaledTime = t / 1 - 1;
   return scaledTime * scaledTime * ((magnitude + 1) * scaledTime + magnitude) + 1;
 }

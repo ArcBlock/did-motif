@@ -1,5 +1,5 @@
 import React from 'react'
-import { render } from './modules/motif'
+import Motif from './modules/motif'
 import DIDMotif from './components/did-motif'
 
 function App() {
@@ -8,11 +8,11 @@ function App() {
   const canvasRef2 = React.useRef(null);
 
   React.useEffect(() => {
-    render(canvasRef.current, { did, size: 200 })
+    new Motif({ did, size: 200, canvas: canvasRef.current }).render();
   }, [canvasRef])
 
   React.useEffect(() => {
-    const canvas = render(canvasRef2.current, { did, size: 200, animation: { duration: 800 } })
+    new Motif({ did, size: 200, canvas: canvasRef2.current }).animate();
   }, [canvasRef2])
 
   return (
