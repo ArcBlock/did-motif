@@ -9,15 +9,21 @@ function App() {
 
   React.useEffect(() => {
     new Motif({ did, size: 200, canvas: canvasRef.current }).render();
-  }, [canvasRef])
+  }, [])
 
   React.useEffect(() => {
     new Motif({ did, size: 200, canvas: canvasRef2.current }).animate();
-  }, [canvasRef2])
+  }, [])
 
   return (
     <div className="App">
-      <DIDMotif did={did} />
+      <div>
+        <DIDMotif did={did} />
+      </div>
+      
+      <div>
+        <DIDMotif did={did} animation={{ duration: 500 }} />
+      </div>
 
       <div>
         <canvas ref={canvasRef}></canvas>
