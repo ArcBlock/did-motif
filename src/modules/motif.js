@@ -10,7 +10,7 @@ const TOTAL_POSITIONS = 64;
  * @param {string} did - DID
  * @returns {object} - 返回结果包含 colorIndex (0-31) 和 positionIndexes (含 8 个元素的数组, 每个元素为 0-63 的数字)
  */
-export const parseDID = (did) => {
+export const parseDID = did => {
   // base58 did -> binary DID string
   // 参考: https://github.com/ArcBlock/ABT-DID-Protocol#create-did (step9 -> step8)
   const decoded = multibase.decode(did);
@@ -33,16 +33,20 @@ export const parseDID = (did) => {
 };
 
 // 从 DID 解析出颜色和位置
-export const getDIDMotifInfo = (did) => {
+export const getDIDMotifInfo = did => {
   const { colorIndex, positionIndexes } = parseDID(did);
   return {
     color: colors[colorIndex],
     // 每个 positionIndex 是一个 [x, y] 的序号, 将其转换为一个 8x8 网格的坐标, 比如 0 -> [0, 0], 4 -> [0, 4], 8 -> [1, 0]
-    positions: positionIndexes.map((index) => [Math.floor(index / 8), index % 8]),
+    positions: positionIndexes.map(index => [Math.floor(index / 8), index % 8]),
   };
 };
 
 export default class Motif {
+  static toDataURL({ did, size = 120 }) {
+    return new Motif({ did, size, canvas: document.createElement('canvas') }).render().toDataURL();
+  }
+
   constructor({ did, size = 120, opacity = 0.5, canvas }) {
     if (!did) {
       throw new Error('DID is required');
@@ -64,11 +68,11 @@ export default class Motif {
     const grid = new Grid({ width: size, height: size, xLines: 8, yLines: 8 });
     this.positions = positions.map(item => grid.getOffset(item[0], item[1]));
   }
-  
+
   draw(canvas, positions) {
     const { size, color, shapeSize: r, opacity } = this;
     const ctx = canvas.getContext('2d');
-    
+
     ctx.clearRect(0, 0, size, size);
     ctx.fillStyle = color;
     ctx.fillRect(0, 0, size, size);
@@ -91,9 +95,9 @@ export default class Motif {
     ctx.restore();
     return canvas;
   }
-  
+
   render() {
-    this.draw(this.canvas, this.positions);
+    return this.draw(this.canvas, this.positions);
   }
 
   animate(options = {}) {
@@ -105,9 +109,11 @@ export default class Motif {
       if (raf) {
         cancelAnimationFrame(raf);
       }
-    }
-    const update = (t) => {
-      startTime || (startTime = t);
+    };
+    const update = t => {
+      if (!startTime) {
+        startTime = t;
+      }
       if (t - startTime > duration) {
         progress = 1;
         onComplete();
@@ -115,17 +121,13 @@ export default class Motif {
         progress = easeOutBack((t - startTime) / duration);
         raf = requestAnimationFrame(update);
       }
-      this.draw(this.canvas, this.positions.map(item => [progress * item[0], progress * item[1]]))
+      this.draw(
+        this.canvas,
+        this.positions.map(item => [progress * item[0], progress * item[1]])
+      );
     };
     requestAnimationFrame(update);
     return cancel;
-  }
-
-  getImageDataURL() {
-		const canvas = document.createElement('canvas');
-    canvas.width = this.size;
-    canvas.height = this.size;
-    return this.draw(canvas, this.positions).toDataURL();
   }
 }
 

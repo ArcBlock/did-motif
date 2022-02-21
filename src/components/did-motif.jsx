@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import Motif from '../modules/motif'
+import Motif from '../modules/motif';
 
 function DIDMotif({ did, size, animation, ...rest }) {
   const canvasRef = React.useRef(null);
@@ -12,11 +12,18 @@ function DIDMotif({ did, size, animation, ...rest }) {
     } else {
       motifRef.current.render();
     }
-  }, [])
-  
+  }, []);
+
   return (
-    <div style={{ display: 'inline-block', width: size, height: size, overflow: 'hidden' }} {...rest}>
-      <canvas ref={canvasRef}></canvas>
+    <div
+      style={{
+        display: 'inline-block',
+        width: size,
+        height: size,
+        overflow: 'hidden',
+      }}
+      {...rest}>
+      <canvas ref={canvasRef} />
     </div>
   );
 }
