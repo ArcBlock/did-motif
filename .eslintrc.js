@@ -6,5 +6,15 @@ module.exports = {
     browser: true,
     node: true,
   },
-  rules: {},
+  rules: {
+    'unicorn/filename-case': [
+      'error',
+      {
+        cases: {
+          kebabCase: true,
+        },
+        ignore: ['App.js'],
+      },
+    ],
+  },
 };
