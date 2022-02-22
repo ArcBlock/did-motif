@@ -1,10 +1,21 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
+import createExternal from 'vite-plugin-external';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  server: {
-    host: '0.0.0.0',
+  build: {
+    lib: {
+      entry: resolve(__dirname, 'src/index.js'),
+      name: 'DIDMotif',
+      fileName: format => `did-motif.${format}.js`,
+    },
   },
+  plugins: [
+    createExternal({
+      externals: {
+        multibase: 'multibase',
+      },
+    }),
+  ],
 });
