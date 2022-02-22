@@ -1,5 +1,5 @@
 /* eslint-disable func-names */
-import { Motif as DIDMotif } from '../src/index';
+import { DIDMotif } from '../src/index';
 
 (function () {
   const canvas = document.getElementById('example-1');
