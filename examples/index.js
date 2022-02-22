@@ -15,5 +15,5 @@ import { DIDMotif } from '../src/index';
 
 (function () {
   const img = document.getElementById('example-3');
-  img.src = DIDMotif.toDataURL({ did: 'z35n6X6rDp8rWWCGSiXZgvd42bixdLULmX8oX' })
+  img.src = DIDMotif.toDataURL({ did: 'z35n6X6rDp8rWWCGSiXZgvd42bixdLULmX8oX' });
 })();
