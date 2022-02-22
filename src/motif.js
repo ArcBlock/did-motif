@@ -42,7 +42,7 @@ export const getDIDMotifInfo = did => {
   };
 };
 
-export default class Motif {
+export class Motif {
   static toDataURL({ did, size = 120 }) {
     return new Motif({ did, size, canvas: document.createElement('canvas') }).render().toDataURL();
   }

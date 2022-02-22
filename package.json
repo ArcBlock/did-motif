@@ -2,6 +2,17 @@
   "name": "@arcblock/did-motif",
   "private": true,
   "version": "0.0.0",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/did-motif.umd.js",
+  "module": "./dist/did-motif.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/did-motif.es.js",
+      "require": "./dist/did-motif.umd.js"
+    }
+  },
   "scripts": {
     "dev": "vite serve examples",
     "build": "vite build",
@@ -10,23 +21,17 @@
     "lint": "eslint '**/*.{js,ts,jsx}'"
   },
   "dependencies": {
-    "multibase": "^4.0.6",
-    "prop-types": "^15.8.1",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0"
+    "multibase": "^4.0.6"
   },
   "devDependencies": {
     "@arcblock/eslint-config": "0.1.8",
     "@ocap/wallet": "^1.14.16",
-    "@vitejs/plugin-react": "^1.0.7",
     "eslint": "^7.31.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-react": "^7.24.0",
-    "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-unicorn": "^34.0.1",
     "prettier": "^2.3.2",
     "vite": "^2.8.0",

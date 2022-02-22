@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { parseDID } from '../src/modules/motif';
+import { parseDID } from '../src/motif';
 
 describe('motif', () => {
   test('parseDID()', () => {
