@@ -23,13 +23,12 @@
     "multibase": "^4.0.6"
   },
   "devDependencies": {
-    "@arcblock/eslint-config": "0.1.8",
+    "@arcblock/eslint-config-base": "0.1.8",
     "@ocap/wallet": "^1.14.16",
     "eslint": "^7.31.0",
-    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb-base": "14.2.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-unicorn": "^34.0.1",
     "prettier": "^2.3.2",

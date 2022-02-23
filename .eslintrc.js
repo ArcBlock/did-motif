@@ -1,5 +1,5 @@
 module.exports = {
-  extends: '@arcblock/eslint-config',
+  extends: '@arcblock/eslint-config-base',
   env: {
     es6: true,
     browser: true,
