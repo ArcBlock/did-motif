@@ -8,7 +8,6 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.js'),
       name: 'DIDMotif',
-      formats: ['es'],
       fileName: format => `did-motif.${format}.js`,
     },
   },

@@ -1,3 +1,7 @@
+## 1.0.3 (February 23, 2022)
+
+- build: adjust build formats
+
 ## 1.0.2 (February 23, 2022)
 
 - chore: use dynamic border-radius
