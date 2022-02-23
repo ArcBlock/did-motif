@@ -91,6 +91,7 @@ export class DIDMotif {
 
   draw(canvas, positions) {
     const { size, color, shapeSize: r, opacity } = this;
+    const borderRadius = calcBorderRadius(size);
     const ctx = canvas.getContext('2d');
 
     ctx.clearRect(0, 0, size, size);
@@ -104,14 +105,13 @@ export class DIDMotif {
           (size * (1 - REVERSED_ASPECT_RATIO)) / 2,
           size,
           size * REVERSED_ASPECT_RATIO,
-          10,
+          borderRadius,
           false,
           false
         );
         break;
       }
       case RoleType.ASSET: {
-        // ctx.arc(100, 100, 75, 0, Math.PI * 2, false);
         drawHexagon(ctx, size / 2, size / 2, size / 2, 0);
         break;
       }
@@ -121,7 +121,7 @@ export class DIDMotif {
       }
       case RoleType.APPLICATION:
       default: {
-        roundRect(ctx, 0, 0, size, size, 10, false, false);
+        roundRect(ctx, 0, 0, size, size, borderRadius, false, false);
       }
     }
     ctx.clip();
@@ -233,3 +233,8 @@ function easeOutBack(t, magnitude = 1.70158) {
   const scaledTime = t / 1 - 1;
   return scaledTime * scaledTime * ((magnitude + 1) * scaledTime + magnitude) + 1;
 }
+
+// Refer to https://www.notion.so/arcblock/DID-Hash-f46254499c954ef399d84f371fcfecc1#fb17d0052a1b457dbde8ba6abd28e87b
+const calcBorderRadius = size => {
+  return size > 80 ? 10 : Math.floor(0.1 * size + 2);
+};
