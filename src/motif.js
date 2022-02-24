@@ -16,6 +16,14 @@ const RoleType = {
   TOKEN: 17,
 };
 
+// did motif 整体外观的形状类型, 区别于内部绘制的六边形 (shape)
+export const Shape = {
+  RECTANGLE: 0,
+  SQUARE: 1,
+  HEXAGON: 2,
+  CIRCLE: 3,
+};
+
 // 根据前 binary DID string 前 2 个字节获取 role type (前 6 bits)
 const parseRoleType = bytes => {
   const firstByte = bytes.slice(0, 1);
@@ -67,7 +75,7 @@ export class DIDMotif {
       .toDataURL();
   }
 
-  constructor({ did, size = 120, opacity = 0.5, canvas }) {
+  constructor({ did, size = 120, opacity = 0.5, canvas, shape }) {
     if (!did) {
       throw new Error('DID is required');
     }
@@ -87,6 +95,26 @@ export class DIDMotif {
     const grid = new Grid({ width: size, height: size, xLines: 8, yLines: 8 });
     this.positions = positions.map(item => grid.getOffset(item[0], item[1]));
     this.roleType = roleType;
+    // shape 指的是 did motif 整体外观的形状, 区别于内部绘制的六边形 (shape)
+    this.shape = shape;
+  }
+
+  // 优先使用显式传入的 shape, 如果未传入或传入值无效, 则使用根据 roleType 推断出的 shape, 默认使用 Shape.SQUARE
+  get motifShape() {
+    if (Object.values(Shape).indexOf(this.shape) > -1) {
+      return this.shape;
+    }
+    return this.getMotifShapeByRoleType(this.roleType);
+  }
+
+  getMotifShapeByRoleType(roleType) {
+    const roleTypeShapeMap = {
+      [RoleType.ACCOUNT]: Shape.RECTANGLE,
+      [RoleType.APPLICATION]: Shape.SQUARE,
+      [RoleType.ASSET]: Shape.HEXAGON,
+      [RoleType.TOKEN]: Shape.CIRCLE,
+    };
+    return roleTypeShapeMap[roleType];
   }
 
   draw(canvas, positions) {
@@ -97,8 +125,8 @@ export class DIDMotif {
     ctx.clearRect(0, 0, size, size);
 
     // 根据 role type 进行 clip 处理
-    switch (this.roleType) {
-      case RoleType.ACCOUNT: {
+    switch (this.motifShape) {
+      case Shape.RECTANGLE: {
         roundRect(
           ctx,
           0,
@@ -111,15 +139,15 @@ export class DIDMotif {
         );
         break;
       }
-      case RoleType.ASSET: {
+      case Shape.HEXAGON: {
         drawHexagon(ctx, size / 2, size / 2, size / 2, 0);
         break;
       }
-      case RoleType.TOKEN: {
+      case Shape.CIRCLE: {
         ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
         break;
       }
-      case RoleType.APPLICATION:
+      case Shape.SQUARE:
       default: {
         roundRect(ctx, 0, 0, size, size, borderRadius, false, false);
       }
