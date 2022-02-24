@@ -12,21 +12,21 @@ class Grid {
   }
 
   get gapX() {
-    return this.options.width / (this.options.yLines - 1);
+    return this.options.width / (this.options.yLines + 1);
   }
 
   get gapY() {
-    return this.options.height / (this.options.xLines - 1);
+    return this.options.height / (this.options.xLines + 1);
   }
 
   init() {
     const { xLines, yLines } = this.options;
     // 以中心点为基准，计算每个 "点" 的偏移
     this.xOffsets = [...new Array(xLines)].map((_, x) => {
-      return x * this.gapX - this.options.width / 2;
+      return (x + 1) * this.gapX - this.options.width / 2;
     });
     this.yOffsets = [...new Array(yLines)].map((_, y) => {
-      return y * this.gapY - this.options.height / 2;
+      return (y + 1) * this.gapY - this.options.height / 2;
     });
   }
 
