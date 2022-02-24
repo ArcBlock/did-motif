@@ -1,3 +1,7 @@
+## 1.0.5 (February 24, 2022)
+
+- feat: allows to explicitly specify the shape
+
 ## 1.0.4 (February 24, 2022)
 
 - chore: improve offset & position calculation
