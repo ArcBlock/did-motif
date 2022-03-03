@@ -1,6 +1,5 @@
 /* eslint-disable func-names */
-import { update, toDataURL } from '../src/index';
-import { Shape } from '../src/constants';
+import { update, toDataURL, Shape } from '../src/index';
 
 update(document.getElementById('example-1'), 'z35n6X6rDp8rWWCGSiXZgvd42bixdLULmX8oX', {
   size: 88,
