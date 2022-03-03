@@ -1,28 +1,9 @@
 import multibase from 'multibase';
-import Grid from './grid';
 import colors from './colors';
-
-const TOTAL_COLORS = 32;
-const TOTAL_POSITIONS = 64;
-// 六边形半径与 did motif size 的比例
-const SHAPE_SIZE_RATIO = 0.25;
-// 对于 account role type, did motif 需要被绘制为矩形, 高宽比为 0.7
-const REVERSED_ASPECT_RATIO = 0.7;
-// 目前只考虑 account/application/token/asset 4 种 role type
-const RoleType = {
-  ACCOUNT: 0,
-  APPLICATION: 3,
-  ASSET: 6,
-  TOKEN: 17,
-};
-
-// did motif 整体外观的形状类型, 区别于内部绘制的六边形 (shape)
-export const Shape = {
-  RECTANGLE: 0,
-  SQUARE: 1,
-  HEXAGON: 2,
-  CIRCLE: 3,
-};
+import { getElementType } from './utils';
+import CanvasRenderer from './renderer/canvas-renderer';
+import SvgRenderer from './renderer/svg-renderer';
+import { TOTAL_COLORS, TOTAL_POSITIONS, Shape, RoleType, ElementType } from './constants';
 
 // 根据前 binary DID string 前 2 个字节获取 role type (前 6 bits)
 const parseRoleType = bytes => {
@@ -68,201 +49,53 @@ export const getDIDMotifInfo = did => {
   };
 };
 
-export class DIDMotif {
-  static toDataURL({ did, size = 120 }) {
-    return new DIDMotif({ did, size, canvas: document.createElement('canvas') })
-      .render()
-      .toDataURL();
+// 优先使用显式传入的 shape, 如果未传入或传入值无效, 则使用根据 roleType 推断出的 shape, 默认使用 Shape.SQUARE
+const getMotifShapeType = (shape, roleType) => {
+  if (Object.values(Shape).indexOf(shape) > -1) {
+    return shape;
   }
+  const roleTypeShapeMapping = {
+    [RoleType.ACCOUNT]: Shape.RECTANGLE,
+    [RoleType.APPLICATION]: Shape.SQUARE,
+    [RoleType.ASSET]: Shape.HEXAGON,
+    [RoleType.TOKEN]: Shape.CIRCLE,
+  };
+  const result = roleTypeShapeMapping[roleType];
+  return !result && result !== 0 ? Shape.SQUARE : result;
+};
 
-  constructor({ did, size = 120, opacity = 0.5, canvas, shape }) {
-    if (!did) {
-      throw new Error('DID is required');
-    }
-    this.size = size;
-    this.did = did;
-    if (canvas) {
-      canvas.width = size;
-      canvas.height = size;
-      this.canvas = canvas;
-    }
-    this.opacity = opacity;
-    this.shapeSize = size * SHAPE_SIZE_RATIO;
-    const { color, positions, roleType } = getDIDMotifInfo(did);
-    // 背景色
-    this.color = color;
-    // 位置
-    const grid = new Grid({ width: size, height: size, xLines: 8, yLines: 8 });
-    this.positions = positions.map(item => grid.getOffset(item[0], item[1]));
-    this.roleType = roleType;
-    // shape 指的是 did motif 整体外观的形状, 区别于内部绘制的六边形 (shape)
-    this.shape = shape;
+const getConfiguration = (did, config) => {
+  const { opacity = 0.5, shape, ...rest } = config;
+  const { color, positions, roleType } = getDIDMotifInfo(did);
+  return {
+    color,
+    positions,
+    opacity,
+    shape: getMotifShapeType(shape, roleType),
+    ...rest,
+  };
+};
+
+// 将 canvas 或 svg 元素更新/渲染为 did motif
+export const update = (element, did, config = {}) => {
+  const _config = getConfiguration(did, config);
+  const elementType = getElementType(element);
+  const renderer =
+    elementType === ElementType.CANVAS
+      ? new CanvasRenderer(element.getContext('2d'), _config)
+      : new SvgRenderer(element, _config);
+
+  const { animation } = config;
+  if (animation) {
+    renderer.animate(typeof animation === 'object' ? animation : {});
+  } else {
+    renderer.render();
   }
+};
 
-  // 优先使用显式传入的 shape, 如果未传入或传入值无效, 则使用根据 roleType 推断出的 shape, 默认使用 Shape.SQUARE
-  get motifShape() {
-    if (Object.values(Shape).indexOf(this.shape) > -1) {
-      return this.shape;
-    }
-    return this.getMotifShapeByRoleType(this.roleType);
-  }
-
-  getMotifShapeByRoleType(roleType) {
-    const roleTypeShapeMap = {
-      [RoleType.ACCOUNT]: Shape.RECTANGLE,
-      [RoleType.APPLICATION]: Shape.SQUARE,
-      [RoleType.ASSET]: Shape.HEXAGON,
-      [RoleType.TOKEN]: Shape.CIRCLE,
-    };
-    return roleTypeShapeMap[roleType];
-  }
-
-  draw(canvas, positions) {
-    const { size, color, shapeSize: r, opacity } = this;
-    const borderRadius = calcBorderRadius(size);
-    const ctx = canvas.getContext('2d');
-
-    ctx.clearRect(0, 0, size, size);
-
-    // 根据 role type 进行 clip 处理
-    switch (this.motifShape) {
-      case Shape.RECTANGLE: {
-        roundRect(
-          ctx,
-          0,
-          (size * (1 - REVERSED_ASPECT_RATIO)) / 2,
-          size,
-          size * REVERSED_ASPECT_RATIO,
-          borderRadius,
-          false,
-          false
-        );
-        break;
-      }
-      case Shape.HEXAGON: {
-        drawHexagon(ctx, size / 2, size / 2, size / 2, 0);
-        break;
-      }
-      case Shape.CIRCLE: {
-        ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
-        break;
-      }
-      case Shape.SQUARE:
-      default: {
-        roundRect(ctx, 0, 0, size, size, borderRadius, false, false);
-      }
-    }
-    ctx.clip();
-
-    // 背景色
-    ctx.fillStyle = color;
-    ctx.fillRect(0, 0, size, size);
-
-    // 六边形绘制
-    ctx.save();
-    ctx.translate(size / 2, size / 2);
-    positions.forEach(([x, y]) => drawHexagon(ctx, x, y, r, opacity));
-    ctx.restore();
-    return canvas;
-  }
-
-  render() {
-    return this.draw(this.canvas, this.positions);
-  }
-
-  animate(options = {}) {
-    const { duration = 1000, onComplete = () => {} } = options;
-    let startTime = null;
-    let progress = 0;
-    let raf = null;
-    const cancel = () => {
-      if (raf) {
-        cancelAnimationFrame(raf);
-      }
-    };
-    const update = t => {
-      if (!startTime) {
-        startTime = t;
-      }
-      if (t - startTime > duration) {
-        progress = 1;
-        onComplete();
-      } else {
-        progress = easeOutBack((t - startTime) / duration);
-        raf = requestAnimationFrame(update);
-      }
-      this.draw(
-        this.canvas,
-        this.positions.map(item => [progress * item[0], progress * item[1]])
-      );
-    };
-    requestAnimationFrame(update);
-    return cancel;
-  }
-}
-
-/**
- * Draws a rounded rectangle using the current state of the canvas.
- * If you omit the last three params, it will draw a rectangle
- * outline with a 5 pixel border radius
- * Refer to https://stackoverflow.com/a/3368118
- * @param {CanvasRenderingContext2D} ctx
- * @param {Number} x The top left x coordinate
- * @param {Number} y The top left y coordinate
- * @param {Number} width The width of the rectangle
- * @param {Number} height The height of the rectangle
- * @param {Number} [radius = 5] The corner radius; It can also be an object
- *                 to specify different radii for corners
- * @param {Number} [radius.tl = 0] Top left
- * @param {Number} [radius.tr = 0] Top right
- * @param {Number} [radius.br = 0] Bottom right
- * @param {Number} [radius.bl = 0] Bottom left
- * @param {Boolean} [fill = false] Whether to fill the rectangle.
- * @param {Boolean} [stroke = true] Whether to stroke the rectangle.
- */
-function roundRect(ctx, x, y, width, height, radius = 10, fill, stroke = true) {
-  const _radius =
-    typeof radius === 'number'
-      ? { tl: radius, tr: radius, br: radius, bl: radius }
-      : { tl: 0, tr: 0, br: 0, bl: 0, ...radius };
-  ctx.beginPath();
-  ctx.moveTo(x + _radius.tl, y);
-  ctx.lineTo(x + width - _radius.tr, y);
-  ctx.quadraticCurveTo(x + width, y, x + width, y + _radius.tr);
-  ctx.lineTo(x + width, y + height - _radius.br);
-  ctx.quadraticCurveTo(x + width, y + height, x + width - _radius.br, y + height);
-  ctx.lineTo(x + _radius.bl, y + height);
-  ctx.quadraticCurveTo(x, y + height, x, y + height - _radius.bl);
-  ctx.lineTo(x, y + _radius.tl);
-  ctx.quadraticCurveTo(x, y, x + _radius.tl, y);
-  ctx.closePath();
-  if (fill) {
-    ctx.fill();
-  }
-  if (stroke) {
-    ctx.stroke();
-  }
-}
-
-// https://eperezcosano.github.io/hex-grid/#a-hexagon
-function drawHexagon(ctx, x, y, r, opacity) {
-  const a = (2 * Math.PI) / 6;
-  ctx.beginPath();
-  for (let i = 0; i < 6; i++) {
-    ctx.lineTo(x + r * Math.cos(a * (i - 1.5)), y + r * Math.sin(a * (i - 1.5)));
-  }
-  ctx.closePath();
-  ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
-  ctx.fill();
-}
-
-// https://github.com/AndrewRayCode/easing-utils/blob/master/src/easing.js
-function easeOutBack(t, magnitude = 1.70158) {
-  const scaledTime = t / 1 - 1;
-  return scaledTime * scaledTime * ((magnitude + 1) * scaledTime + magnitude) + 1;
-}
-
-// Refer to https://www.notion.so/arcblock/DID-Hash-f46254499c954ef399d84f371fcfecc1#fb17d0052a1b457dbde8ba6abd28e87b
-const calcBorderRadius = size => {
-  return size > 80 ? 10 : Math.floor(0.1 * size + 2);
+export const toDataURL = (did, config) => {
+  const _config = getConfiguration(did, config);
+  const canvas = document.createElement('canvas');
+  new CanvasRenderer(canvas.getContext('2d'), _config).render();
+  return canvas.toDataURL();
 };

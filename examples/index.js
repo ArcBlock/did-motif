@@ -1,85 +1,95 @@
 /* eslint-disable func-names */
-import { DIDMotif, Shape } from '../src/index';
+import { update, toDataURL } from '../src/index';
+import { Shape } from '../src/constants';
 
-(function () {
-  const canvas = document.getElementById('example-1');
-  const motif = new DIDMotif({ did: 'z35n6X6rDp8rWWCGSiXZgvd42bixdLULmX8oX', canvas, size: 88 });
-  motif.render();
-})();
+update(document.getElementById('example-1'), 'z35n6X6rDp8rWWCGSiXZgvd42bixdLULmX8oX', {
+  size: 88,
+});
 
-(function () {
-  const canvas = document.getElementById('example-2');
-  const motif = new DIDMotif({ did: 'z35n6X6rDp8rWWCGSiXZgvd42bixdLULmX8oX', canvas, size: 88 });
-  motif.animate();
-})();
+update(document.getElementById('example-2'), 'z35n6X6rDp8rWWCGSiXZgvd42bixdLULmX8oX', {
+  size: 88,
+  animation: true,
+});
 
-(function () {
-  const img = document.getElementById('example-3');
-  img.src = DIDMotif.toDataURL({ did: 'z35n6X6rDp8rWWCGSiXZgvd42bixdLULmX8oX', size: 88 });
-})();
+document.getElementById('example-3').src = toDataURL('z35n6X6rDp8rWWCGSiXZgvd42bixdLULmX8oX', {
+  size: 88,
+});
 
 // DIDMotif Shape Examples (roleType based)
 (function () {
   // account
-  new DIDMotif({
-    did: 'z1YXMb8Souf2u8zVwWzexSNiD5Te7XGS313',
-    canvas: document.getElementById('example-4-1'),
+  update(document.getElementById('example-4-1'), 'z1YXMb8Souf2u8zVwWzexSNiD5Te7XGS313', {
     size: 88,
-  }).animate();
+    animation: true,
+  });
   // application
-  new DIDMotif({
-    did: 'zNKeLKixvCM32TkVM1zmRDdAU3bvm3dTtAcM',
-    canvas: document.getElementById('example-4-2'),
+  update(document.getElementById('example-4-2'), 'zNKeLKixvCM32TkVM1zmRDdAU3bvm3dTtAcM', {
     size: 88,
-  }).animate();
+    animation: true,
+  });
   // asset
-  new DIDMotif({
-    did: 'zjdj2tvjvLVF9S3eFaaX5xEEDuwLu6qdQk2t',
-    canvas: document.getElementById('example-4-3'),
+  update(document.getElementById('example-4-3'), 'zjdj2tvjvLVF9S3eFaaX5xEEDuwLu6qdQk2t', {
     size: 88,
-  }).animate();
+    animation: true,
+  });
   // token
-  new DIDMotif({
-    did: 'z35n6X6rDp8rWWCGSiXZgvd42bixdLULmX8oX',
-    canvas: document.getElementById('example-4-4'),
+  update(document.getElementById('example-4-4'), 'z35n6X6rDp8rWWCGSiXZgvd42bixdLULmX8oX', {
     size: 88,
-  }).animate();
+    animation: true,
+  });
   // unsupported role type (default Shape - square)
-  new DIDMotif({
-    did: 'z3CtC3bGEFsDVvJC2GUqBcCfJyZM7a5uqY1fS',
-    canvas: document.getElementById('example-4-5'),
+  update(document.getElementById('example-4-5'), 'z3CtC3bGEFsDVvJC2GUqBcCfJyZM7a5uqY1fS', {
     size: 88,
-  }).animate();
+    animation: true,
+  });
 })();
 
 // DIDMotif Shape Examples (explicitly specify shape)
 (function () {
   // account & Shape.CIRCLE
-  new DIDMotif({
-    did: 'z1YXMb8Souf2u8zVwWzexSNiD5Te7XGS313',
-    canvas: document.getElementById('example-5-1'),
+  update(document.getElementById('example-5-1'), 'z1YXMb8Souf2u8zVwWzexSNiD5Te7XGS313', {
     size: 88,
     shape: Shape.CIRCLE,
-  }).animate();
+  });
   // application & Shape.HEXAGON
-  new DIDMotif({
-    did: 'zNKeLKixvCM32TkVM1zmRDdAU3bvm3dTtAcM',
-    canvas: document.getElementById('example-5-2'),
+  update(document.getElementById('example-5-2'), 'zNKeLKixvCM32TkVM1zmRDdAU3bvm3dTtAcM', {
     size: 88,
     shape: Shape.HEXAGON,
-  }).animate();
+  });
   // asset & Shape.SQUARE
-  new DIDMotif({
-    did: 'zjdj2tvjvLVF9S3eFaaX5xEEDuwLu6qdQk2t',
-    canvas: document.getElementById('example-5-3'),
+  update(document.getElementById('example-5-3'), 'zjdj2tvjvLVF9S3eFaaX5xEEDuwLu6qdQk2t', {
     size: 88,
     shape: Shape.SQUARE,
-  }).animate();
+  });
   // token & Shape.RECTANGLE
-  new DIDMotif({
-    did: 'z35n6X6rDp8rWWCGSiXZgvd42bixdLULmX8oX',
-    canvas: document.getElementById('example-5-4'),
+  update(document.getElementById('example-5-4'), 'z35n6X6rDp8rWWCGSiXZgvd42bixdLULmX8oX', {
     size: 88,
     shape: Shape.RECTANGLE,
-  }).animate();
+  });
+})();
+
+// SvgRenderer Examples
+(function () {
+  // account
+  update(document.getElementById('example-6-1'), 'z1YXMb8Souf2u8zVwWzexSNiD5Te7XGS313', {
+    size: 20,
+  });
+  // application
+  update(document.getElementById('example-6-2'), 'zNKeLKixvCM32TkVM1zmRDdAU3bvm3dTtAcM', {
+    size: 44,
+  });
+  // asset
+  update(document.getElementById('example-6-3'), 'zjdj2tvjvLVF9S3eFaaX5xEEDuwLu6qdQk2t', {
+    size: 88,
+  });
+  // token
+  update(document.getElementById('example-6-4'), 'z35n6X6rDp8rWWCGSiXZgvd42bixdLULmX8oX', {
+    size: 88,
+    animation: true,
+  });
+  // unsupported role type (default Shape - square)
+  update(document.getElementById('example-6-5'), 'z3CtC3bGEFsDVvJC2GUqBcCfJyZM7a5uqY1fS', {
+    size: 88,
+    animation: true,
+  });
 })();
