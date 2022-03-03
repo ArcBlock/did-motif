@@ -92,3 +92,9 @@ document.getElementById('example-3').src = toDataURL('z35n6X6rDp8rWWCGSiXZgvd42b
     animation: true,
   });
 })();
+
+// Invalid DID
+(function () {
+  const canvas = document.createElement('canvas');
+  update(canvas, 'invalid-did-z1YXMb8Souf2u8zVwWzexSNiD5Te7XGS313');
+})();
