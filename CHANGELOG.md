@@ -1,3 +1,9 @@
+## 1.1.0 (March 03, 2022)
+
+- feat: add support for svg rendering  
+
+BREAKING CHANGE: export named functions instead of DIDMotif class
+
 ## 1.0.5 (February 24, 2022)
 
 - feat: allows to explicitly specify the shape
