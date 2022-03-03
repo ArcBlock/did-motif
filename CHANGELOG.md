@@ -1,3 +1,8 @@
+## 1.1.1 (March 03, 2022)
+
+- chore: export Shape constant
+- chore: handle did parsing error
+
 ## 1.1.0 (March 03, 2022)
 
 - feat: add support for svg rendering  
