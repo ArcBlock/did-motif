@@ -1,3 +1,7 @@
+## 1.1.2 (March 17, 2022)
+
+- chore: print error reason when a did fails to parse
+
 ## 1.1.1 (March 03, 2022)
 
 - chore: export Shape constant
