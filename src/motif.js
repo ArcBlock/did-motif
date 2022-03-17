@@ -106,8 +106,8 @@ export const update = (element, did, config = {}) => {
   } catch (e) {
     // 对于 DID 解析失败的情况, 只打印错误信息 (此时不会执行渲染逻辑)
     if (e instanceof DIDParsingError) {
-      // eslint-disable-next-line no-console
-      console.log(e.message);
+      console.error(e.message);
+      console.error(e.cause);
     } else {
       throw e;
     }
