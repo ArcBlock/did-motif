@@ -1,3 +1,7 @@
+## 1.1.3 (March 23, 2022)
+
+- feat: support toDataURL/toPng in nodejs
+
 ## 1.1.2 (March 17, 2022)
 
 - chore: print error reason when a did fails to parse
