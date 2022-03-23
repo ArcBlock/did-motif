@@ -75,7 +75,7 @@ const getMotifShapeType = (shape, roleType) => {
   return !result && result !== 0 ? Shape.SQUARE : result;
 };
 
-const getConfiguration = (did, config) => {
+export const getConfiguration = (did, config) => {
   const { opacity = 0.5, shape, ...rest } = config;
   const { color, positions, roleType } = getDIDMotifInfo(did);
   return {

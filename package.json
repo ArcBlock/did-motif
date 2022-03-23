@@ -9,17 +9,18 @@
   "exports": {
     ".": {
       "import": "./dist/did-motif.es.js",
-      "require": "./dist/did-motif.umd.js"
+      "require": "./dist/did-motif.cjs.js"
     }
   },
   "scripts": {
     "dev": "vite serve examples",
-    "build": "vite build",
+    "build": "node scripts/build.js",
     "preview": "vite preview",
     "test": "vitest",
     "lint": "eslint '**/*.{js,ts,jsx}'"
   },
   "dependencies": {
+    "@napi-rs/canvas": "^0.1.21",
     "multibase": "^4.0.6"
   },
   "devDependencies": {
