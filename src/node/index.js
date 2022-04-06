@@ -2,6 +2,8 @@ import { createCanvas } from '@napi-rs/canvas';
 import { getConfiguration } from '../motif';
 import CanvasRenderer from '../renderer/canvas-renderer';
 
+export { Shape } from '../constants';
+
 const render = (did, config = {}) => {
   const _config = { ...getConfiguration(did, config), size: config.size || 100 };
   const canvas = createCanvas(_config.size, _config.size);
