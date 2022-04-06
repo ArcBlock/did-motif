@@ -80,6 +80,7 @@ export default class SvgRenderer {
   }
 
   render() {
+    this.el.innerHTML = '';
     this.setBackground();
     this.drawHexagons(this.config.positions);
   }
