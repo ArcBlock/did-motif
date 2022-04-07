@@ -20,7 +20,6 @@
     "lint": "eslint '**/*.{js,ts,jsx}'"
   },
   "dependencies": {
-    "@napi-rs/canvas": "^0.1.21",
     "multibase": "^4.0.6"
   },
   "devDependencies": {

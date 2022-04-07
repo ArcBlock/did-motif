@@ -33,7 +33,7 @@ const createExternal = require('vite-plugin-external');
         fileName: format => `did-motif.${format}.js`,
       },
       rollupOptions: {
-        external: ['multibase', '@napi-rs/canvas'],
+        external: ['multibase'],
       },
     },
   });
