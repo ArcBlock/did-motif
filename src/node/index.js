@@ -1,22 +1,27 @@
-import { createCanvas } from '@napi-rs/canvas';
 import { getConfiguration } from '../motif';
-import CanvasRenderer from '../renderer/canvas-renderer';
+import SvgRenderer from '../renderer/svg-renderer';
+import Element from './element';
 
 export { Shape } from '../constants';
 
-const render = (did, config = {}) => {
+export const toSvg = (did, config = {}) => {
   const _config = { ...getConfiguration(did, config), size: config.size || 100 };
-  const canvas = createCanvas(_config.size, _config.size);
-  new CanvasRenderer(canvas.getContext('2d'), _config).render();
-  return canvas;
+  const el = new Element('svg', { xmlns: 'http://www.w3.org/2000/svg' });
+  const renderer = new _SvgRenderer(el, _config);
+  renderer.render();
+  return el.toString();
 };
 
+// 基于 svg content 的 toDataURL
 export const toDataURL = (did, config = {}) => {
-  const canvas = render(did, config);
-  return canvas.toDataURL();
+  const svgContent = toSvg(did, config);
+  const prefix = 'data:image/svg+xml;base64,';
+  return prefix + Buffer.from(svgContent).toString('base64');
 };
 
-export const toPng = (did, config = {}) => {
-  const canvas = render(did, config);
-  return canvas.toBuffer('image/png');
-};
+class _SvgRenderer extends SvgRenderer {
+  // 覆盖 createElement 方法
+  createElement(...args) {
+    return new Element(...args);
+  }
+}
