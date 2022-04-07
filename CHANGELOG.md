@@ -1,3 +1,10 @@
+## 1.1.4 (April 07, 2022)
+
+- chore: remove @napi-rs/canvas dependency
+- feat: support toSvg in nodejs & remove toPng function
+- chore(svg-renderer): clear elements before drawing
+- chore: export Shape constant
+
 ## 1.1.3 (March 23, 2022)
 
 - feat: support toDataURL/toPng in nodejs
