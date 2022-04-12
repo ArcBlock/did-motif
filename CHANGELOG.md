@@ -1,3 +1,7 @@
+## 1.1.5 (April 12, 2022)
+
+- chore: adjust package exports
+
 ## 1.1.4 (April 07, 2022)
 
 - chore: remove @napi-rs/canvas dependency
