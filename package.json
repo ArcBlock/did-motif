@@ -4,12 +4,12 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/did-motif.umd.js",
+  "main": "./dist/did-motif.cjs.js",
+  "umd:main": "./dist/did-motif.umd.js",
   "module": "./dist/did-motif.es.js",
   "exports": {
-    "node": {
-      "require": "./dist/did-motif.cjs.js"
-    },
+    "import": "./dist/did-motif.es.js",
+    "require": "./dist/did-motif.cjs.js",
     "default": "./dist/did-motif.es.js"
   },
   "scripts": {
