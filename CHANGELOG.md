@@ -1,3 +1,7 @@
+## 1.1.6 (May 24, 2022)
+
+- chore: replace multibase with bs58
+
 ## 1.1.5 (April 12, 2022)
 
 - chore: adjust package exports
