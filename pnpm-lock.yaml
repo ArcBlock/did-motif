@@ -3,20 +3,19 @@ lockfileVersion: 5.3
 specifiers:
   '@arcblock/eslint-config-base': 0.1.8
   '@ocap/wallet': ^1.14.16
+  bs58: ^5.0.0
   eslint: ^7.31.0
   eslint-config-airbnb-base: 14.2.1
   eslint-config-prettier: ^8.3.0
   eslint-plugin-import: ^2.23.4
   eslint-plugin-prettier: ^3.4.0
   eslint-plugin-unicorn: ^34.0.1
-  multibase: ^4.0.6
   prettier: ^2.3.2
   vite: ^2.8.0
-  vite-plugin-external: ^1.2.3
   vitest: ^0.5.0
 
 dependencies:
-  multibase: 4.0.6
+  bs58: 5.0.0
 
 devDependencies:
   '@arcblock/eslint-config-base': 0.1.8_3d5c7d0263686e434116a2e965460272
@@ -29,7 +28,6 @@ devDependencies:
   eslint-plugin-unicorn: 34.0.1_eslint@7.32.0
   prettier: 2.5.1
   vite: 2.8.4
-  vite-plugin-external: 1.2.3
   vitest: 0.5.0
 
 packages:
@@ -338,6 +336,7 @@ packages:
 
   /@multiformats/base-x/4.0.1:
     resolution: {integrity: sha512-eMk0b9ReBbV23xXU693TAIrLyeO5iTgBZGSJfpqriG8UkYvr/hC9u9pyMlAakDNHWmbhMZCDs6KQO0jzKD8OTw==}
+    dev: true
 
   /@ocap/mcrypto/1.14.16:
     resolution: {integrity: sha512-ctdVhv8yPkISYxIBoHiNkN4JLse8+NneMv5Inq1VQQFsXenYkYAoqkJ5dNv9uG0t3GMym3zLzO1n+6ZAxm6iog==}
@@ -497,6 +496,10 @@ packages:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
     dev: true
 
+  /base-x/4.0.0:
+    resolution: {integrity: sha512-FuwxlW4H5kh37X/oW59pwTzzTKRzfrrQwhmyspRM7swOEZcHtDZSCt45U6oKgtuFE+WYPblePMVIPR4RZrh/hw==}
+    dev: false
+
   /base64-url/2.3.3:
     resolution: {integrity: sha512-dLMhIsK7OplcDauDH/tZLvK7JmUZK3A7KiQpjNzsBrM6Etw7hzNI1tLEywqJk9NnwkgWuFKSlx/IUO7vF6Mo8Q==}
     engines: {node: '>=6'}
@@ -532,6 +535,12 @@ packages:
       node-releases: 2.0.2
       picocolors: 1.0.0
     dev: true
+
+  /bs58/5.0.0:
+    resolution: {integrity: sha512-r+ihvQJvahgYT50JD05dyJNKlmmSlMoOGwn1lCcEzanPglg7TxYjioQUYehQ9mAR/+hOSd2jRc/Z2y5UxBymvQ==}
+    dependencies:
+      base-x: 4.0.0
+    dev: false
 
   /buffer-to-arraybuffer/0.0.5:
     resolution: {integrity: sha1-YGSkD6dutDxyOrqe+PbhIW0QURo=}
@@ -1309,15 +1318,6 @@ packages:
     resolution: {integrity: sha1-C+4AUBiusmDQo6865ljdATbsG5k=}
     dev: true
 
-  /fs-extra/10.0.0:
-    resolution: {integrity: sha512-C5owb14u9eJwizKGdchcDUQeFtlSHHthBk8pbX9Vc1PFZrLombudjDnNns88aYslCyF6IY5SUw3Roz6xShcEIQ==}
-    engines: {node: '>=12'}
-    dependencies:
-      graceful-fs: 4.2.9
-      jsonfile: 6.1.0
-      universalify: 2.0.0
-    dev: true
-
   /fs.realpath/1.0.0:
     resolution: {integrity: sha1-FQStJSMVjKpA20onh8sBQRmU6k8=}
     dev: true
@@ -1398,10 +1398,6 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       type-fest: 0.20.2
-    dev: true
-
-  /graceful-fs/4.2.9:
-    resolution: {integrity: sha512-NtNxqUcXgpW2iMrfqSfR73Glt39K+BLwWsPs94yR63v45T0Wbej7eRmL5cWfwEgqXnmjQp3zaJTshdRW/qC2ZQ==}
     dev: true
 
   /has-bigints/1.0.1:
@@ -1689,14 +1685,6 @@ packages:
       minimist: 1.2.5
     dev: true
 
-  /jsonfile/6.1.0:
-    resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
-    dependencies:
-      universalify: 2.0.0
-    optionalDependencies:
-      graceful-fs: 4.2.9
-    dev: true
-
   /levn/0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
@@ -1799,14 +1787,6 @@ packages:
       '@multiformats/base-x': 4.0.1
       web-encoding: 1.1.5
     dev: true
-
-  /multibase/4.0.6:
-    resolution: {integrity: sha512-x23pDe5+svdLz/k5JPGCVdfn7Q5mZVMBETiC+ORfO+sor9Sgs0smJzAjfTbM5tckeCqnaUuMYoz+k3RXMmJClQ==}
-    engines: {node: '>=12.0.0', npm: '>=6.0.0'}
-    deprecated: This module has been superseded by the multiformats module
-    dependencies:
-      '@multiformats/base-x': 4.0.1
-    dev: false
 
   /multimap/1.1.0:
     resolution: {integrity: sha512-0ZIR9PasPxGXmRsEF8jsDzndzHDj7tIav+JUmvIFB/WHswliFnquxECT/De7GR4yg99ky/NlRKJT82G1y271bw==}
@@ -2368,11 +2348,6 @@ packages:
       which-boxed-primitive: 1.0.2
     dev: true
 
-  /universalify/2.0.0:
-    resolution: {integrity: sha512-hAZsKq7Yy11Zu1DE0OzWjw7nnLZmJZYTDZZyEFHZdUhV8FkH5MCfoU1XMaxXovpyW5nq5scPqq0ZDP9Zyl04oQ==}
-    engines: {node: '>= 10.0.0'}
-    dev: true
-
   /uri-js/4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
     dependencies:
@@ -2407,12 +2382,6 @@ packages:
     dependencies:
       spdx-correct: 3.1.1
       spdx-expression-parse: 3.0.1
-    dev: true
-
-  /vite-plugin-external/1.2.3:
-    resolution: {integrity: sha512-NCVDWVY7J/t8Z6/au5fqY+lDIMfv0CFayyO2OaJFnVCB0PVH8qh+b99Zq2BarS3/cRLdZLCzjlhqzLfc60OkSg==}
-    dependencies:
-      fs-extra: 10.0.0
     dev: true
 
   /vite/2.8.4:

@@ -20,7 +20,7 @@
     "lint": "eslint '**/*.{js,ts,jsx}'"
   },
   "dependencies": {
-    "multibase": "^4.0.6"
+    "bs58": "^5.0.0"
   },
   "devDependencies": {
     "@arcblock/eslint-config-base": "0.1.8",
@@ -33,7 +33,6 @@
     "eslint-plugin-unicorn": "^34.0.1",
     "prettier": "^2.3.2",
     "vite": "^2.8.0",
-    "vite-plugin-external": "^1.2.3",
     "vitest": "^0.5.0"
   }
 }

@@ -1,6 +1,5 @@
 const { build } = require('vite');
 const { resolve } = require('path');
-const createExternal = require('vite-plugin-external');
 
 (async () => {
   await build({
@@ -12,14 +11,15 @@ const createExternal = require('vite-plugin-external');
         formats: ['es', 'umd'],
         fileName: format => `did-motif.${format}.js`,
       },
-    },
-    plugins: [
-      createExternal({
-        externals: {
-          multibase: 'multibase',
+      rollupOptions: {
+        external: ['bs58'],
+        output: {
+          globals: {
+            bs58: 'bs58',
+          },
         },
-      }),
-    ],
+      },
+    },
   });
 
   await build({
@@ -33,7 +33,7 @@ const createExternal = require('vite-plugin-external');
         fileName: format => `did-motif.${format}.js`,
       },
       rollupOptions: {
-        external: ['multibase'],
+        external: ['bs58'],
       },
     },
   });

@@ -1,4 +1,4 @@
-import multibase from 'multibase';
+import base58 from 'bs58';
 import colors from './colors';
 import { getElementType } from './utils';
 import CanvasRenderer from './renderer/canvas-renderer';
@@ -19,6 +19,20 @@ const parseRoleType = bytes => {
   return firstByte >>> 2;
 };
 
+const isBase58btc = data => {
+  if (typeof data !== 'string') {
+    return false;
+  }
+  return data[0] === 'z';
+};
+
+const decodeDid = did => {
+  if (!isBase58btc(did)) {
+    throw new Error(`Invalid DID string: ${did}`);
+  }
+  return base58.decode(did.slice(1));
+};
+
 /**
  * 解析 DID, 根据 DID 计算背景色和位置
  * @param {string} did - DID
@@ -28,7 +42,7 @@ export const parseDID = did => {
   try {
     // base58 did -> binary DID string
     // 参考: https://github.com/ArcBlock/ABT-DID-Protocol#create-did (step9 -> step8)
-    const decoded = multibase.decode(did);
+    const decoded = decodeDid(did);
     const roleType = parseRoleType(decoded);
     // 移除前 2 bytes (did type 部分)
     const striped = decoded.slice(2);
