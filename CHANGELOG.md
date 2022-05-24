@@ -1,3 +1,7 @@
+## 1.1.7 (May 24, 2022)
+
+- chore: adjust entry point in package.json
+
 ## 1.1.6 (May 24, 2022)
 
 - chore: replace multibase with bs58
