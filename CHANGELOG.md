@@ -1,3 +1,7 @@
+## 1.1.8 (May 28, 2022)
+
+- fix(deps): ocap deps should be latest
+
 ## 1.1.7 (May 24, 2022)
 
 - chore: adjust entry point in package.json
