@@ -7,11 +7,11 @@ export const easeOutBack = (t, magnitude = 1.70158) => {
 };
 
 // Refer to https://www.notion.so/arcblock/DID-Hash-f46254499c954ef399d84f371fcfecc1#fb17d0052a1b457dbde8ba6abd28e87b
-export const calcBorderRadius = size => {
+export const calcBorderRadius = (size) => {
   return size > 80 ? 10 : Math.floor(0.1 * size + 2);
 };
 
-export const getElementType = el => {
+export const getElementType = (el) => {
   if (el) {
     const { tagName } = el;
     if (/^svg$/i.test(tagName)) {
@@ -35,7 +35,7 @@ export const animate = (options = {}) => {
       raf = null;
     }
   };
-  const update = t => {
+  const update = (t) => {
     if (!startTime) {
       startTime = t;
     }
