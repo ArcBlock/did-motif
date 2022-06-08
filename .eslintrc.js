@@ -4,16 +4,4 @@ module.exports = {
   env: {
     browser: true,
   },
-  rules: {
-    'unicorn/filename-case': [
-      'error',
-      {
-        cases: {
-          kebabCase: true,
-        },
-        ignore: ['App.js'],
-      },
-    ],
-  },
-  ignorePatterns: ['dist/'],
 };
