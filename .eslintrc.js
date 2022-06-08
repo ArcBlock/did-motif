@@ -1,9 +1,8 @@
 module.exports = {
+  root: true,
   extends: '@arcblock/eslint-config-base',
   env: {
-    es6: true,
     browser: true,
-    node: true,
   },
   rules: {
     'unicorn/filename-case': [
