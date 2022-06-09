@@ -15,8 +15,7 @@ export default class SvgRenderer {
     this.config = config;
 
     const _size =
-      config.size ||
-      Math.min(Number(el.getAttribute('width')) || 100, Number(el.getAttribute('height')) || 100);
+      config.size || Math.min(Number(el.getAttribute('width')) || 100, Number(el.getAttribute('height')) || 100);
 
     el.setAttribute('viewBox', `0 0 ${_size} ${_size}`);
 
@@ -24,7 +23,7 @@ export default class SvgRenderer {
     this.config = {
       ...config,
       size: _size,
-      positions: config.positions.map(item => {
+      positions: config.positions.map((item) => {
         const [x, y] = grid.getOffset(item[0], item[1]);
         return [svgValue(x), svgValue(y)];
       }),
@@ -106,8 +105,8 @@ export default class SvgRenderer {
     return animate({
       duration,
       onComplete,
-      callback: progress => {
-        this.drawHexagons(positions.map(item => [progress * item[0], progress * item[1]]));
+      callback: (progress) => {
+        this.drawHexagons(positions.map((item) => [progress * item[0], progress * item[1]]));
       },
     });
   }
@@ -119,11 +118,11 @@ export default class SvgRenderer {
     for (let i = 0; i < 6; i++) {
       points.push([x + r * Math.cos(a * (i - 1.5)), y + r * Math.sin(a * (i - 1.5))]);
     }
-    return points.map(point => [svgValue(point[0]), svgValue(point[1])]);
+    return points.map((point) => [svgValue(point[0]), svgValue(point[1])]);
   }
 
   getPointsStr(points) {
-    return points.map(point => `${svgValue(point[0])},${svgValue(point[1])}`).join(' ');
+    return points.map((point) => `${svgValue(point[0])},${svgValue(point[1])}`).join(' ');
   }
 
   drawHexagon(points, opacity) {
@@ -146,17 +145,17 @@ export default class SvgRenderer {
   createElement(name, attrs = {}, children = []) {
     const el = document.createElementNS(XMLNS, name);
     const { style = {}, ...rest } = attrs;
-    Object.keys(rest).forEach(key => {
+    Object.keys(rest).forEach((key) => {
       el.setAttribute(key, rest[key]);
     });
-    Object.keys(style).forEach(key => {
+    Object.keys(style).forEach((key) => {
       el.style[key] = style[key];
     });
     if (!Array.isArray(children)) {
       // eslint-disable-next-line no-param-reassign
       children = [children];
     }
-    children.forEach(child => el.appendChild(child));
+    children.forEach((child) => el.appendChild(child));
     return el;
   }
 }

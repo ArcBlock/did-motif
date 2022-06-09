@@ -12,7 +12,7 @@ export default class CanvasRenderer {
     this.config = {
       ...config,
       size: _size,
-      positions: config.positions.map(item => grid.getOffset(item[0], item[1])),
+      positions: config.positions.map((item) => grid.getOffset(item[0], item[1])),
       shapeSize: _size * SHAPE_SIZE_RATIO,
     };
   }
@@ -75,8 +75,8 @@ export default class CanvasRenderer {
     return animate({
       duration,
       onComplete,
-      callback: progress => {
-        this.draw(positions.map(item => [progress * item[0], progress * item[1]]));
+      callback: (progress) => {
+        this.draw(positions.map((item) => [progress * item[0], progress * item[1]]));
       },
     });
   }
@@ -112,7 +112,7 @@ export default class CanvasRenderer {
    * @param {Boolean} [fill = false] Whether to fill the rectangle.
    * @param {Boolean} [stroke = true] Whether to stroke the rectangle.
    */
-  drawRoundedRect(ctx, x, y, width, height, radius = 10, fill, stroke = true) {
+  drawRoundedRect(ctx, x, y, width, height, radius = 10, fill = false, stroke = true) {
     const _radius =
       typeof radius === 'number'
         ? { tl: radius, tr: radius, br: radius, bl: radius }

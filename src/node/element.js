@@ -21,17 +21,15 @@ export default class Element {
     return str
       .split('')
       .map((letter, idx) => {
-        return letter.toUpperCase() === letter
-          ? `${idx !== 0 ? '-' : ''}${letter.toLowerCase()}`
-          : letter;
+        return letter.toUpperCase() === letter ? `${idx !== 0 ? '-' : ''}${letter.toLowerCase()}` : letter;
       })
       .join('');
   }
 
   getAttrsStr() {
     return Object.keys(this.attrs)
-      .filter(key => this.attrs[key] !== undefined)
-      .map(key => `${key}="${this.attrs[key]}"`)
+      .filter((key) => this.attrs[key] !== undefined)
+      .map((key) => `${key}="${this.attrs[key]}"`)
       .join(' ');
   }
 
@@ -40,14 +38,14 @@ export default class Element {
       return '';
     }
     return `style="${Object.keys(this.style)
-      .filter(key => this.style[key] !== undefined)
-      .map(key => `${this.kebabize(key)}:${this.style[key]}`)
+      .filter((key) => this.style[key] !== undefined)
+      .map((key) => `${this.kebabize(key)}:${this.style[key]}`)
       .join(';')}"`;
   }
 
   toString() {
     return `<${this.name} ${this.getAttrsStr()} ${this.getStyleStr()}>${this.children
-      .map(item => item.toString())
+      .map((item) => item.toString())
       .join('')}</${this.name}>`;
   }
 }

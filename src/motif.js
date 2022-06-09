@@ -13,20 +13,20 @@ class DIDParsingError extends Error {
 }
 
 // 根据前 binary DID string 前 2 个字节获取 role type (前 6 bits)
-const parseRoleType = bytes => {
+const parseRoleType = (bytes) => {
   const firstByte = bytes.slice(0, 1);
   // eslint-disable-next-line no-bitwise
   return firstByte >>> 2;
 };
 
-const isBase58btc = data => {
+const isBase58btc = (data) => {
   if (typeof data !== 'string') {
     return false;
   }
   return data[0] === 'z';
 };
 
-const decodeDid = did => {
+const decodeDid = (did) => {
   if (!isBase58btc(did)) {
     throw new Error(`Invalid DID string: ${did}`);
   }
@@ -38,7 +38,7 @@ const decodeDid = did => {
  * @param {string} did - DID
  * @returns {object} - 返回结果包含 colorIndex (0-31) 和 positionIndexes (含 8 个元素的数组, 每个元素为 0-63 的数字)
  */
-export const parseDID = did => {
+export const parseDID = (did) => {
   try {
     // base58 did -> binary DID string
     // 参考: https://github.com/ArcBlock/ABT-DID-Protocol#create-did (step9 -> step8)
@@ -64,12 +64,12 @@ export const parseDID = did => {
 };
 
 // 从 DID 解析出颜色和位置
-export const getDIDMotifInfo = did => {
+export const getDIDMotifInfo = (did) => {
   const { colorIndex, positionIndexes, roleType } = parseDID(did);
   return {
     color: colors[colorIndex],
     // 每个 positionIndex 是一个 [x, y] 的序号, 将其转换为一个 8x8 网格的坐标, 比如 0 -> [0, 0], 4 -> [0, 4], 8 -> [1, 0]
-    positions: positionIndexes.map(index => [Math.floor(index / 8), index % 8]),
+    positions: positionIndexes.map((index) => [Math.floor(index / 8), index % 8]),
     roleType,
   };
 };

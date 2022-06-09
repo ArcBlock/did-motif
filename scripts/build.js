@@ -9,7 +9,7 @@ const { resolve } = require('path');
         entry: resolve(__dirname, '../src/index.js'),
         name: 'DIDMotif',
         formats: ['es', 'umd'],
-        fileName: format => `did-motif.${format}.js`,
+        fileName: (format) => `did-motif.${format}.js`,
       },
       rollupOptions: {
         external: ['bs58'],
@@ -30,7 +30,7 @@ const { resolve } = require('path');
         entry: resolve(__dirname, '../src/node/index.js'),
         name: 'DIDMotif',
         formats: ['cjs'],
-        fileName: format => `did-motif.${format}.js`,
+        fileName: (format) => `did-motif.${format}.js`,
       },
       rollupOptions: {
         external: ['bs58'],

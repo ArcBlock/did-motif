@@ -1,3 +1,7 @@
+## 1.1.10 (June 08, 2022)
+
+- chore: upgrade @arcblock/eslint-config to 0.2.1
+
 ## 1.1.9 (May 31, 2022)
 
 - chore: adjust entry point in package.json
