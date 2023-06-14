@@ -1,3 +1,7 @@
+## 1.1.11 (June 14, 2023)
+
+- chore: add missing cjs exports
+
 ## 1.1.10 (June 08, 2022)
 
 - chore: upgrade @arcblock/eslint-config to 0.2.1

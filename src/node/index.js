@@ -1,8 +1,9 @@
-import { getConfiguration } from '../motif';
+import { getConfiguration, parseDID, getDIDMotifInfo } from '../motif';
 import SvgRenderer from '../renderer/svg-renderer';
 import Element from './element';
 
 export { Shape } from '../constants';
+export { parseDID, getDIDMotifInfo };
 
 export const toSvg = (did, config = {}) => {
   const _config = { ...getConfiguration(did, config), size: config.size || 100 };
