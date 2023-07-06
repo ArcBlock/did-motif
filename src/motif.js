@@ -134,3 +134,11 @@ export const toDataURL = (did, config) => {
   new CanvasRenderer(canvas.getContext('2d'), _config).render();
   return canvas.toDataURL();
 };
+
+export const toSvg = (did, config = {}) => {
+  const _config = { ...getConfiguration(did, config), size: config.size || 100 };
+  const el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  const renderer = new SvgRenderer(el, _config);
+  renderer.render();
+  return el.outerHTML;
+};
