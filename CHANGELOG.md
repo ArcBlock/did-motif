@@ -1,3 +1,7 @@
+## 1.1.13 (July 06, 2023)
+
+- feat: add toSvg to esm
+
 ## 1.1.12 (June 18, 2023)
 
 - feat: export colors
