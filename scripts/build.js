@@ -29,8 +29,8 @@ const { resolve } = require('path');
       lib: {
         entry: resolve(__dirname, '../src/node/index.js'),
         name: 'DIDMotif',
-        formats: ['cjs'],
-        fileName: (format) => `did-motif.${format}.js`,
+        formats: ['es', 'cjs'],
+        fileName: (format) => `did-motif.node.${format}.js`,
       },
       rollupOptions: {
         external: ['bs58'],

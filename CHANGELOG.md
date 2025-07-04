@@ -1,3 +1,7 @@
+## 1.1.14 (July 04, 2025)
+
+- chore: adjust exports and build script for Node.js compatibility
+
 ## 1.1.13 (July 06, 2023)
 
 - feat: add toSvg to esm

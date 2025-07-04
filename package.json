@@ -1,6 +1,6 @@
 {
   "name": "@arcblock/did-motif",
-  "version": "1.1.13",
+  "version": "1.1.14",
   "files": [
     "dist"
   ],
@@ -9,7 +9,9 @@
   "module": "./dist/did-motif.es.js",
   "exports": {
     "node": {
-      "require": "./dist/did-motif.cjs.js"
+      "require": "./dist/did-motif.node.cjs.js",
+      "import": "./dist/did-motif.node.es.js",
+      "default": "./dist/did-motif.node.es.js"
     },
     "import": "./dist/did-motif.es.js",
     "default": "./dist/did-motif.es.js"
